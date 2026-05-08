@@ -7,6 +7,7 @@ using namespace std;
 char board[H][W] = {};
 
 int x, y, b;
+
 char blocks[][4][4] = {
     {{' ', 'I', ' ', ' '},
      {' ', 'I', ' ', ' '},
@@ -129,3 +130,4 @@ int main()
         }
         return 0;
 }
+
