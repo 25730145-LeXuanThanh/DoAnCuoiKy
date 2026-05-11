@@ -1,20 +1,12 @@
 #include <iostream>
 #include <conio.h>
-#include <windows.h>
-#include <ctime>
-#include <string>
-#include <vector>
-#include <algorithm>
 
 using namespace std;
-#define H 30
+#define H 20
 #define W 15
+char board[H][W] = {};
 
-char board[H][W];
-char currentBlock[4][4];
-
-int x, y, b, score = 0, nextBlock;
-int speed = 1000;
+int x, y, b;
 
 char blocks[][4][4] = {
     {{' ', 'I', ' ', ' '},
@@ -82,33 +74,29 @@ char blocks[][4][4] = {
      {'L', 'L', 'L', ' '},
      {' ', ' ', ' ', ' '}}};
 
-bool canMove(int dx, int dy){
-    for (int i = 0; i < 4; i++ )
-        for (int j = 0; j < 4; j++ )
-            if (blocks[b][i][j] != ' ') {
-                int xt = x + j + dx;
-                int yt = y + i + dy;
-                if (xt < 1 || xt >= W-1 || yt >= H-1 ) return false;
-                if (board[yt][xt] != ' ') return false;
-            }
-    return true;
+// ===== COLOR =====
+string getColor(char c){
+    switch(c){
+        case 'I': return "\033[96m";
+        case 'O': return "\033[93m";
+        case 'T': return "\033[95m";
+        case 'S': return "\033[92m";
+        case 'Z': return "\033[91m";
+        case 'J': return "\033[94m";
+        case 'L': return "\033[33m";
+        default: return "\033[0m";
+    }
 }
-//
+
+bool canMove(int dx, int dy)
+{
+}
 void block2Board()
 {
-    for (int i = 0; i < 4; i++ )
-        for (int j = 0; j < 4; j++ )
-            if (blocks[b][i][j] != ' ')
-                board[y+i][x+j] = blocks[b][i][j];
 }
 void boardDelBlock()
 {
-    for (int i = 0; i < 4; i++ )
-        for (int j = 0; j < 4; j++ )
-            if (blocks[b][i][j] != ' ')
-                board[y+i][x+j] = ' ';
 }
-
 void initBoard(){
     for (int i = 0 ; i < H ; i++)
         for (int j = 0 ; j < W ; j++)
@@ -163,3 +151,4 @@ int main()
         }
         return 0;
 }
+
