@@ -1,5 +1,6 @@
 #include <iostream>
 #include <conio.h>
+#include <windows.h>
 
 using namespace std;
 #define H 20
@@ -86,6 +87,17 @@ string getColor(char c){
         case 'L': return "\033[33m";
         default: return "\033[0m";
     }
+}
+void gotoXY(int x, int y){
+    COORD c = {(SHORT)x,(SHORT)y};
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+}
+
+void hideCursor(){
+    CONSOLE_CURSOR_INFO ci;
+    ci.bVisible = FALSE;
+    ci.dwSize = 100;
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &ci);
 }
 
 bool canMove(int dx, int dy)
