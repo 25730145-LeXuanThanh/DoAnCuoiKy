@@ -1,12 +1,20 @@
 #include <iostream>
 #include <conio.h>
+#include <windows.h>
+#include <ctime>
+#include <string>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
-#define H 20
+#define H 30
 #define W 15
-char board[H][W] = {};
 
-int x, y, b;
+char board[H][W];
+char currentBlock[4][4];
+
+int x, y, b, score = 0, nextBlock;
+int speed = 1000;
 
 char blocks[][4][4] = {
     {{' ', 'I', ' ', ' '},
