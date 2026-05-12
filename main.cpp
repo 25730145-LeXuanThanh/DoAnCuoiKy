@@ -10,6 +10,8 @@
 using namespace std;
 #define H 30
 #define W 15
+
+char currentBlock[4][4];
 char board[H][W] = {};
 
 int x, y, b, nextBlock, score = 0, speed = 1000;
@@ -161,6 +163,21 @@ void draw()
                 for (int j = 0; j < W; j++)
                         cout << board[i][j];
 }
+
+void rotate(){
+    char tmp[4][4];
+    for(int i=0;i<4;i++)
+        for(int j=0;j<4;j++)
+            tmp[j][3-i] = currentBlock[i][j];
+
+    char old[4][4];
+    memcpy(old, currentBlock, sizeof(old));
+    memcpy(currentBlock, tmp, sizeof(tmp));
+
+    if(!canMove(0,0))
+        memcpy(currentBlock, old, sizeof(old));
+}
+
 void removeLine()
 {
 }
