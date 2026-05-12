@@ -124,6 +124,22 @@ void rotate(){
 
 void removeLine()
 {
+    for(int i=H-2;i>0;i--)
+    {
+        bool full = true;
+        for(int j=1;j<W-1;j++)
+            if(board[i][j]==' ') full=false;
+
+        if(full)
+        {
+            score+=100;
+             if(speed > 200) speed -= 5;
+            for(int ii=i;ii>1;ii--)
+                for(int jj=1;jj<W-1;jj++)
+                    board[ii][jj]=board[ii-1][jj];
+            i++;
+        }
+    }
 }
 
 int main()
