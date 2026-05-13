@@ -169,9 +169,31 @@ void resetGame()
         spawnBlock();
 }
 
-void saveScore(int sc) {}
+void hardDrop() {
+    int dropped = 0;
+    while (canMove(0, 1)) {
+        y++;
+        dropped++;
+    }
+    score += dropped;
+    block2Board();
+    removeLine();
+    
+    x = 5; y = 1;
+    spawnBlock();
 
-void showLeaderboard() {}
+    if (!canMove(0, 0)) {
+                gotoXY(0,H+2);
+                cout<<"\033[91mGAME OVER\033[0m\nScore: "<<score<<endl;
+
+                cout<<"\n[R] Restart  [Q] Quit";
+
+            while(1){
+            char c=getch();
+            if(c=='r'||c=='R'){ resetGame(); break; }
+            if(c=='q'||c=='Q') exit(0);}
+    }
+}
 
 int main()
 {
@@ -207,7 +229,7 @@ int main()
                         if (c == 'w')
                                 rotate();
                         if (c == ' ')
-                                ;
+                                hardDrop();
                         if (c == 'q')
                                 break;
                 }
@@ -230,12 +252,10 @@ int main()
 
                                 if (!canMove(0, 0))
                                 {
-                                        saveScore(score);
 
                                         gotoXY(0, H + 2);
                                         cout << "\033[91mGAME OVER\033[0m\nScore: " << score << endl;
 
-                                        showLeaderboard();
                                         cout << "\n[R] Restart  [Q] Quit";
 
                                         while (1)
