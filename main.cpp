@@ -142,6 +142,16 @@ void removeLine()
     }
 }
 
+void spawnBlock() {
+    b = nextBlock;
+    nextBlock = rand() % 7;
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+            currentBlock[i][j] = blocks[b][i][j];
+        }
+    }
+}
+
 int main()
 {
         HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
