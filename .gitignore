@@ -1,0 +1,34 @@
+# ===== VS Code =====
+.vscode/
+*.code-workspace
+
+# ===== Visual Studio =====
+.vs/
+*.vcxproj.user
+*.vcxproj.filters
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+Debug/
+Release/
+x64/
+x86/
+ipch/
+*.pdb
+*.obj
+*.log
+*.tlog
+*.ilk
+*.idb
+*.exe
+*.slnx
+
+# ===== Code::Blocks =====
+bin/
+obj/
+*.layout
+*.depend
+*.cbTemp
+*.cbp
