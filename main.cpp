@@ -16,16 +16,14 @@ char board[H][W] = {};
 
 int x, y, b, nextBlock, score = 0, speed = 1000;
 
-
 char blocks[7][4][4] = {
-    {{' ','I',' ',' '},{' ','I',' ',' '},{' ','I',' ',' '},{' ','I',' ',' '}},
-    {{' ',' ',' ',' '},{' ','O','O',' '},{' ','O','O',' '},{' ',' ',' ',' '}},
-    {{' ','T',' ',' '},{'T','T','T',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{' ','S','S',' '},{'S','S',' ',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{'Z','Z',' ',' '},{' ','Z','Z',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{'J',' ',' ',' '},{'J','J','J',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}},
-    {{' ',' ','L',' '},{'L','L','L',' '},{' ',' ',' ',' '},{' ',' ',' ',' '}}
-};
+    {{' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}},
+    {{' ', ' ', ' ', ' '}, {' ', 'O', 'O', ' '}, {' ', 'O', 'O', ' '}, {' ', ' ', ' ', ' '}},
+    {{' ', 'T', ' ', ' '}, {'T', 'T', 'T', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}},
+    {{' ', 'S', 'S', ' '}, {'S', 'S', ' ', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}},
+    {{'Z', 'Z', ' ', ' '}, {' ', 'Z', 'Z', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}},
+    {{'J', ' ', ' ', ' '}, {'J', 'J', 'J', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}},
+    {{' ', ' ', 'L', ' '}, {'L', 'L', 'L', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}}};
 
 // ===== COLOR =====
 string getColor(char c)
@@ -66,31 +64,34 @@ void hideCursor()
 
 bool canMove(int dx, int dy)
 {
-        for (int i = 0; i < 4; i++ )
-        for (int j = 0; j < 4; j++ )
-            if (blocks[b][i][j] != ' ') {
-                int xt = x + j + dx;
-                int yt = y + i + dy;
-                if (xt < 1 || xt >= W-1 || yt >= H-1 ) return false;
-                if (board[yt][xt] != ' ') return false;
-            }
-    return true;
+        for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                        if (blocks[b][i][j] != ' ')
+                        {
+                                int xt = x + j + dx;
+                                int yt = y + i + dy;
+                                if (xt < 1 || xt >= W - 1 || yt >= H - 1)
+                                        return false;
+                                if (board[yt][xt] != ' ')
+                                        return false;
+                        }
+        return true;
 }
 void block2Board()
 {
-        for (int i = 0; i < 4; i++ )
-        for (int j = 0; j < 4; j++ )
-        if (blocks[b][i][j] != ' ')
-                board[y+i][x+j] = blocks[b][i][j];
+        for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                        if (blocks[b][i][j] != ' ')
+                                board[y + i][x + j] = blocks[b][i][j];
 }
-void boardDelBlock()
+void delBlock()
 {
-        for (int i = 0; i < 4; i++ )
-        for (int j = 0; j < 4; j++ )
-        if (blocks[b][i][j] != ' ')
-                board[y+i][x+j] = ' ';
+        for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                        if (blocks[b][i][j] != ' ')
+                                board[y + i][x + j] = ' ';
 }
-void initBoard()
+void init()
 {
         for (int i = 0; i < H; i++)
                 for (int j = 0; j < W; j++)
@@ -108,68 +109,89 @@ void draw()
                         cout << board[i][j];
 }
 
-void rotate(){
-    char tmp[4][4];
-    for(int i=0;i<4;i++)
-        for(int j=0;j<4;j++)
-            tmp[j][3-i] = currentBlock[i][j];
+void rotate()
+{
+        char tmp[4][4];
+        for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                        tmp[j][3 - i] = currentBlock[i][j];
 
-    char old[4][4];
-    memcpy(old, currentBlock, sizeof(old));
-    memcpy(currentBlock, tmp, sizeof(tmp));
+        char old[4][4];
+        memcpy(old, currentBlock, sizeof(old));
+        memcpy(currentBlock, tmp, sizeof(tmp));
 
-    if(!canMove(0,0))
-        memcpy(currentBlock, old, sizeof(old));
+        if (!canMove(0, 0))
+                memcpy(currentBlock, old, sizeof(old));
 }
 
 void removeLine()
 {
-    for(int i=H-2;i>0;i--)
-    {
-        bool full = true;
-        for(int j=1;j<W-1;j++)
-            if(board[i][j]==' ') full=false;
-
-        if(full)
+        for (int i = H - 2; i > 0; i--)
         {
-            score+=100;
-             if(speed > 200) speed -= 5;
-            for(int ii=i;ii>1;ii--)
-                for(int jj=1;jj<W-1;jj++)
-                    board[ii][jj]=board[ii-1][jj];
-            i++;
+                bool full = true;
+                for (int j = 1; j < W - 1; j++)
+                        if (board[i][j] == ' ')
+                                full = false;
+
+                if (full)
+                {
+                        score += 100;
+                        if (speed > 200)
+                                speed -= 5;
+                        for (int ii = i; ii > 1; ii--)
+                                for (int jj = 1; jj < W - 1; jj++)
+                                        board[ii][jj] = board[ii - 1][jj];
+                        i++;
+                }
         }
-    }
 }
 
-void spawnBlock() {
-    b = nextBlock;
-    nextBlock = rand() % 7;
-    for(int i = 0; i < 4; i++) {
-        for(int j = 0; j < 4; j++) {
-            currentBlock[i][j] = blocks[b][i][j];
+void spawnBlock()
+{
+        b = nextBlock;
+        nextBlock = rand() % 7;
+        for (int i = 0; i < 4; i++)
+        {
+                for (int j = 0; j < 4; j++)
+                {
+                        currentBlock[i][j] = blocks[b][i][j];
+                }
         }
-    }
 }
+
+void resetGame()
+{
+        init();
+        score = 0;
+        speed = 1000;
+        x = 5;
+        y = 1;
+        spawnBlock();
+}
+
+void saveScore(int sc) {}
+
+void showLeaderboard() {}
 
 int main()
 {
-        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        DWORD lastFall = GetTickCount();
 
-        DWORD dwMode = 0;
-        GetConsoleMode(hOut, &dwMode);
-
-        dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-
-        SetConsoleMode(hOut, dwMode);
         srand(time(0));
-        x = 5;
-        y = 0;
-        b = rand() % 7;
-        initBoard();
+
+        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        DWORD mode = 0;
+        GetConsoleMode(hOut, &mode);
+        mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+        SetConsoleMode(hOut, mode);
+
+        hideCursor();
+        resetGame();
+
         while (1)
         {
-                boardDelBlock();
+                delBlock();
+
                 if (kbhit())
                 {
                         char c = getch();
@@ -177,24 +199,64 @@ int main()
                                 x--;
                         if (c == 'd' && canMove(1, 0))
                                 x++;
-                        if (c == 'x' && canMove(0, 1))
+                        if (c == 's' && canMove(0, 1))
+                        {
                                 y++;
+                                score += 1;
+                        }
+                        if (c == 'w')
+                                rotate();
+                        if (c == ' ')
+                                ;
                         if (c == 'q')
                                 break;
                 }
-                if (canMove(0, 1))
-                        y++;
-                else
+
+                if (GetTickCount() - lastFall >= speed)
                 {
-                        block2Board();
-                        removeLine();
-                        x = 5;
-                        y = 0;
-                        b = rand() % 7;
+                        if (canMove(0, 1))
+                        {
+                                y++;
+                        }
+                        else
+                        {
+
+                                block2Board();
+                                removeLine();
+
+                                x = 5;
+                                y = 1;
+                                spawnBlock();
+
+                                if (!canMove(0, 0))
+                                {
+                                        saveScore(score);
+
+                                        gotoXY(0, H + 2);
+                                        cout << "\033[91mGAME OVER\033[0m\nScore: " << score << endl;
+
+                                        showLeaderboard();
+                                        cout << "\n[R] Restart  [Q] Quit";
+
+                                        while (1)
+                                        {
+                                                char c = getch();
+                                                if (c == 'r' || c == 'R')
+                                                {
+                                                        resetGame();
+                                                        break;
+                                                }
+                                                if (c == 'q' || c == 'Q')
+                                                        return 0;
+                                        }
+                                }
+                        }
+                        lastFall = GetTickCount();
                 }
+
                 block2Board();
                 draw();
-                _sleep(500);
+
+                Sleep(25);
         }
-        return 0;
 }
