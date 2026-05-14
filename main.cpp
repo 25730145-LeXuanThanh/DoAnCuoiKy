@@ -93,13 +93,22 @@ void init()
                         else
                                 board[i][j] = ' ';
 }
-void draw()
-{
-        system("cls");
+// ===== DRAW =====
+void draw(){
+    string s = "";
+    s.clear();
 
-        for (int i = 0; i < H; i++, cout << endl)
-                for (int j = 0; j < W; j++)
-                        cout << board[i][j];
+    for(int i=0;i<H;i++){
+        for(int j=0;j<W;j++){
+            if(board[i][j]=='#') s+="\033[37m##";
+            else if(board[i][j]==' ') s+="  ";
+            else s+=getColor(board[i][j])+"[]";
+        }
+        s+="\033[0m\n";
+    }
+    gotoXY(0,0);
+    cout << s;
+    cout.flush();
 }
 
 void rotate()
