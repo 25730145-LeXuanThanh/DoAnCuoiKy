@@ -1,11 +1,4 @@
-#include <iostream>
-#include <conio.h>
-#include <windows.h>
-#include <ctime>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <algorithm>
+#include <blocks.cpp>
 
 using namespace std;
 #define H 30
