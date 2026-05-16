@@ -70,20 +70,7 @@ bool canMove(int dx, int dy)
                         }
         return true;
 }
-void block2Board()
-{
-        for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                        if (blocks[b][i][j] != ' ')
-                                board[y + i][x + j] = blocks[b][i][j];
-}
-void delBlock()
-{
-        for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                        if (blocks[b][i][j] != ' ')
-                                board[y + i][x + j] = ' ';
-}
+
 void init()
 {
         for (int i = 0; i < H; i++)
