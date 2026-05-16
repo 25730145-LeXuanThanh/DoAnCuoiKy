@@ -1,13 +1,15 @@
-#include <blocks.cpp>
+#include "blocks.cpp"
 
 using namespace std;
 #define H 30
 #define W 15
 
-char currentBlock[4][4];
-char board[H][W] = {};
+vector<vector<char>> board(H, vector<char>(W, ' '));
 
-int x, y, b, nextBlock, score = 0, speed = 1000;
+std::unique_ptr<Block> currentBlock;
+std::unique_ptr<Block> nextBlock;
+
+int score = 0, speed = 1000;
 
 char blocks[7][4][4] = {
     {{' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}},
@@ -19,6 +21,9 @@ char blocks[7][4][4] = {
     {{' ', ' ', 'L', ' '}, {'L', 'L', 'L', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}}};
 
 // ===== COLOR =====
+void drawScore();
+void drawNext();
+
 string getColor(char c)
 {
         switch (c)
