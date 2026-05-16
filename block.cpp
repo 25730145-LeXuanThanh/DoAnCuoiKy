@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 using namespace std;
 
@@ -40,5 +41,19 @@ void move(int dx, int dy)
         {x += dx;
         y += dy;
         }
+
+    void block2Board()
+    {
+        for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                        if (curentBlock[i][j] != ' ')
+                                board[y + i][x + j] = curentBlock[i][j];
+    }
+    void delBlock()
+    {
+        for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                        if (curentBlock[i][j] != ' ')
+                                board[y + i][x + j] = ' ';
     }
 };
