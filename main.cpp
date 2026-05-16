@@ -21,6 +21,9 @@ char blocks[7][4][4] = {
     {{' ', ' ', 'L', ' '}, {'L', 'L', 'L', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}}};
 
 // ===== COLOR =====
+void drawScore();
+void drawNext();
+
 string getColor(char c)
 {
         switch (c)

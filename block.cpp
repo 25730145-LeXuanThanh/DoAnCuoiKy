@@ -19,4 +19,9 @@ public:
     Block() : x(5), y(1) {}
 
     void rotate(){};
+
+    void block2Board();
+    void delBlock();
+    void canMove();
+    void move();
 };
