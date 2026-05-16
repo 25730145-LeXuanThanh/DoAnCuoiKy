@@ -20,8 +20,18 @@ public:
 
     void rotate(){};
 
-    void block2Board();
-    void delBlock();
-    void canMove();
-    void move();
+    void block2Board()
+    {
+        for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                        if (curentBlock[i][j] != ' ')
+                                board[y + i][x + j] = curentBlock[i][j];
+    }
+    void delBlock()
+    {
+        for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                        if (curentBlock[i][j] != ' ')
+                                board[y + i][x + j] = ' ';
+    }
 };
