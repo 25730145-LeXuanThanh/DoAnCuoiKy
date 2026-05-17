@@ -56,4 +56,14 @@ void move(int dx, int dy)
                         if (curentBlock[i][j] != ' ')
                                 board[y + i][x + j] = ' ';
     }
+
+    int getX()
+    {
+        return x;
+    }
+
+    int getY()
+    {
+        return y;
+    }
 };
