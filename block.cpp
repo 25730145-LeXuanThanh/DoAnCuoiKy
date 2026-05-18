@@ -20,35 +20,37 @@ public:
 
     void rotate(){};
     
-bool canMove(int dx, int dy)
+bool canMove(int dx, int dy, const vector<vector<char>>& board)
 {
-        for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                        if (blocks[b][i][j] != ' ')
-                        {
-                                int xt = x + j + dx;
-                                int yt = y + i + dy;
-                                if (xt < 1 || xt >= W - 1 || yt >= H - 1)
-                                        return false;
-                                if (board[yt][xt] != ' ')
-                                        return false;
-                        }
-        return true;
-}
-void move(int dx, int dy)
-    {
-        if(canMove(dx, dy))
-        {x += dx;
+        int H = board.size();
+        int W = board[0].size();
+
+    for(int i=0;i<4;i++)
+        for(int j=0;j<4;j++)
+            if(matrix[i][j] != ' ')
+            {
+                int xt = x + j + dx;
+                int yt = y + i + dy;
+                if(xt < 1 || xt >= W-1 || yt >= H-1) return false;
+                if(board[yt][xt] != ' ') return false;
+            }
+    return true;
+    }
+void move(int dx, int dy, vector<vector<char>>& board)
+{
+        if(canMove(dx, dy, board))
+        {
+        x += dx;
         y += dy;
         }
-
+}
     void block2Board()
-    {
+{
         for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
                         if (curentBlock[i][j] != ' ')
                                 board[y + i][x + j] = curentBlock[i][j];
-    }
+}
     void delBlock()
     {
         for (int i = 0; i < 4; i++)
