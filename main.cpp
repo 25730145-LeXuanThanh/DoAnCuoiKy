@@ -113,6 +113,44 @@ void draw(){
     cout.flush();
 }
 
+void drawNext()
+{
+    static Block* lastNext = nullptr;
+    if (nextBlock.get() == lastNext)
+    return;
+    lastNext = nextBlock.get();
+    int uiX = W * 2 + 4;
+
+    gotoXY(uiX, 5);
+    cout << "\033[37mNEXT";
+
+    for (int i = 0; i < 4; i++)
+    {
+        gotoXY(uiX, 7 + i);
+        cout << "        ";
+    }
+
+    for (int i = 0; i < 4; i++)
+        {
+        gotoXY(uiX, 7 + i);
+        for (int j = 0; j < 4; j++) 
+        {
+            char cell = nextBlock->getCell(i, j);
+            if (cell != ' ')
+            {
+                cout << getColor(cell)
+                     << "[]";
+            }
+            else
+            {
+                cout << "  ";
+            }
+        }
+        }
+    cout << "\033[0m";
+    cout.flush();
+}
+
 void rotate()
 {
         char tmp[4][4];

@@ -66,4 +66,9 @@ void move(int dx, int dy)
     {
         return y;
     }
+
+    char getCell(int r, int c)
+    {
+        return matrix[r][c];
+    }
 };
