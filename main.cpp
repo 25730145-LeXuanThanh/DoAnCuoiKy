@@ -86,21 +86,27 @@ void init()
                                 board[i][j] = ' ';
 }
 // ===== DRAW =====
-void draw(){
-    string s = "";
-    s.clear();
+void draw()
+{
+        string s = "";
+        s.clear();
 
-    for(int i=0;i<H;i++){
-        for(int j=0;j<W;j++){
-            if(board[i][j]=='#') s+="\033[37m##";
-            else if(board[i][j]==' ') s+="  ";
-            else s+=getColor(board[i][j])+"[]";
+        for (int i = 0; i < H; i++)
+        {
+                for (int j = 0; j < W; j++)
+                {
+                        if (board[i][j] == '#')
+                                s += "\033[37m##";
+                        else if (board[i][j] == ' ')
+                                s += "  ";
+                        else
+                                s += getColor(board[i][j]) + "[]";
+                }
+                s += "\033[0m\n";
         }
-        s+="\033[0m\n";
-    }
-    gotoXY(0,0);
-    cout << s;
-    cout.flush();
+        gotoXY(0, 0);
+        cout << s;
+        cout.flush();
 }
 
 void rotate()
@@ -163,30 +169,41 @@ void resetGame()
         spawnBlock();
 }
 
-void hardDrop() {
-    int dropped = 0;
-    while (canMove(0, 1)) {
-        y++;
-        dropped++;
-    }
-    score += dropped;
-    block2Board();
-    removeLine();
-    
-    x = 5; y = 1;
-    spawnBlock();
+void hardDrop()
+{
+        int dropped = 0;
+        while (canMove(0, 1))
+        {
+                y++;
+                dropped++;
+        }
+        score += dropped;
+        block2Board();
+        removeLine();
 
-    if (!canMove(0, 0)) {
-                gotoXY(0,H+2);
-                cout<<"\033[91mGAME OVER\033[0m\nScore: "<<score<<endl;
+        x = 5;
+        y = 1;
+        spawnBlock();
 
-                cout<<"\n[R] Restart  [Q] Quit";
+        if (!canMove(0, 0))
+        {
+                gotoXY(0, H + 2);
+                cout << "\033[91mGAME OVER\033[0m\nScore: " << score << endl;
 
-            while(1){
-            char c=getch();
-            if(c=='r'||c=='R'){ resetGame(); break; }
-            if(c=='q'||c=='Q') exit(0);}
-    }
+                cout << "\n[R] Restart  [Q] Quit";
+
+                while (1)
+                {
+                        char c = getch();
+                        if (c == 'r' || c == 'R')
+                        {
+                                resetGame();
+                                break;
+                        }
+                        if (c == 'q' || c == 'Q')
+                                exit(0);
+                }
+        }
 }
 
 int main()
@@ -211,64 +228,52 @@ int main()
                 if (kbhit())
                 {
                         char c = getch();
-                        if (c == 'a' && canMove(-1, 0))
-                                x--;
-                        if (c == 'd' && canMove(1, 0))
-                                x++;
-                        if (c == 's' && canMove(0, 1))
+                        if (c == 'a')
+                                currentBlock->move(-1, 0, board);
+                        if (c == 'd')
+                                currentBlock->move(1, 0, board);
+                        if (c == 's')
                         {
-                                y++;
+                                currentBlock->move(0, 1, board);
                                 score += 1;
                         }
                         if (c == 'w')
-                                rotate();
+                                currentBlock->rotate(board);
                         if (c == ' ')
                                 hardDrop();
                         if (c == 'q')
                                 break;
                 }
 
-                if (GetTickCount() - lastFall >= speed)
-                {
-                        if (canMove(0, 1))
-                        {
-                                y++;
-                        }
-                        else
-                        {
+                 if(GetTickCount() - lastFall >= speed){
+        if (currentBlock->canMove(0, 1, board)) {
+        currentBlock->move(0, 1, board);
+        }
+        else
+        {
+           
+            currentBlock->block2Board(board);
+            removeLine();
 
-                                block2Board();
-                                removeLine();
+            
+            spawnBlock();
 
-                                x = 5;
-                                y = 1;
-                                spawnBlock();
+           
 
-                                if (!canMove(0, 0))
-                                {
+            if(!currentBlock->canMove(0, 0, board)){
+                saveScore(score);
 
-                                        gotoXY(0, H + 2);
-                                        cout << "\033[91mGAME OVER\033[0m\nScore: " << score << endl;
+                drawGameOver();
 
-                                        cout << "\n[R] Restart  [Q] Quit";
-
-                                        while (1)
-                                        {
-                                                char c = getch();
-                                                if (c == 'r' || c == 'R')
-                                                {
-                                                        resetGame();
-                                                        break;
-                                                }
-                                                if (c == 'q' || c == 'Q')
-                                                        return 0;
-                                        }
-                                }
-                        }
-                        lastFall = GetTickCount();
-                }
-
-                block2Board();
+            while(1){
+            char c=getch();
+            if(c=='r'||c=='R'){ resetGame(); break; }
+            if(c=='q'||c=='Q') return 0;}
+            }
+        }
+            lastFall = GetTickCount();
+    }
+                 currentBlock->block2Board(board);
                 draw();
 
                 Sleep(25);
