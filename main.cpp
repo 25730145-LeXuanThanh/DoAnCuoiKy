@@ -1,13 +1,15 @@
-#include <blocks.cpp>
+#include "blocks.cpp"
 
 using namespace std;
 #define H 30
 #define W 15
 
-char currentBlock[4][4];
-char board[H][W] = {};
+vector<vector<char>> board(H, vector<char>(W, ' '));
 
-int x, y, b, nextBlock, score = 0, speed = 1000;
+std::unique_ptr<Block> currentBlock;
+std::unique_ptr<Block> nextBlock;
+
+int score = 0, speed = 1000;
 
 char blocks[7][4][4] = {
     {{' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}},
@@ -19,6 +21,9 @@ char blocks[7][4][4] = {
     {{' ', ' ', 'L', ' '}, {'L', 'L', 'L', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}}};
 
 // ===== COLOR =====
+void drawScore();
+void drawNext();
+
 string getColor(char c)
 {
         switch (c)
@@ -70,20 +75,7 @@ bool canMove(int dx, int dy)
                         }
         return true;
 }
-void block2Board()
-{
-        for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                        if (blocks[b][i][j] != ' ')
-                                board[y + i][x + j] = blocks[b][i][j];
-}
-void delBlock()
-{
-        for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                        if (blocks[b][i][j] != ' ')
-                                board[y + i][x + j] = ' ';
-}
+
 void init()
 {
         for (int i = 0; i < H; i++)
@@ -108,6 +100,19 @@ void draw(){
     }
     gotoXY(0,0);
     cout << s;
+    cout.flush();
+}
+
+void drawScore()
+{
+    static int lastScore = -1;
+    if (score == lastScore)
+        return;
+    lastScore = score;
+    int uiX = W * 2 + 4;
+    gotoXY(uiX, 2);
+    cout << "\033[37m";
+    cout << "SCORE: " << score << "     ";
     cout.flush();
 }
 
