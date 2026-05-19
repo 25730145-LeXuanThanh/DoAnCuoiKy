@@ -103,6 +103,19 @@ void draw(){
     cout.flush();
 }
 
+void drawScore()
+{
+    static int lastScore = -1;
+    if (score == lastScore)
+        return;
+    lastScore = score;
+    int uiX = W * 2 + 4;
+    gotoXY(uiX, 2);
+    cout << "\033[37m";
+    cout << "SCORE: " << score << "     ";
+    cout.flush();
+}
+
 void rotate()
 {
         char tmp[4][4];
