@@ -151,6 +151,20 @@ void drawNext()
     cout.flush();
 }
 
+void drawGameOver()
+{
+    int uiX = W * 2 + 4;
+    gotoXY(uiX, 13);
+    cout << "\033[91mGAME OVER\033[0m";
+    gotoXY(uiX, 15);
+    cout << "Score: " << score;
+    gotoXY(uiX, 17);
+    cout << "[R] Restart";
+    gotoXY(uiX, 18);
+    cout << "[Q] Quit";
+    cout.flush();
+}
+
 void rotate()
 {
         char tmp[4][4];
