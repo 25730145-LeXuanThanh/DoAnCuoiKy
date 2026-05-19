@@ -43,19 +43,19 @@ void move(int dx, int dy, vector<vector<char>>& board)
         x += dx;
         y += dy;
         }
-}
-    void block2Board()
-{
-        for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                        if (curentBlock[i][j] != ' ')
-                                board[y + i][x + j] = curentBlock[i][j];
-}
-    void delBlock()
+
+    void block2Board(vector<vector<char>>& board)
     {
         for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                        if (curentBlock[i][j] != ' ')
+                        if (matrix[i][j] != ' ')
+                                board[y + i][x + j] = matrix[i][j];
+    }
+    void delBlock(vector<vector<char>>& board)
+    {
+        for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                        if (matrix[i][j] != ' ')
                                 board[y + i][x + j] = ' ';
     }
 };
