@@ -58,4 +58,19 @@ void move(int dx, int dy, vector<vector<char>>& board)
                         if (matrix[i][j] != ' ')
                                 board[y + i][x + j] = ' ';
     }
+
+    int getX()
+    {
+        return x;
+    }
+
+    int getY()
+    {
+        return y;
+    }
+
+    char getCell(int r, int c)
+    {
+        return matrix[r][c];
+    }
 };

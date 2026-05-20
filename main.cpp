@@ -11,15 +11,6 @@ std::unique_ptr<Block> nextBlock;
 
 int score = 0, speed = 1000;
 
-char blocks[7][4][4] = {
-    {{' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}, {' ', 'I', ' ', ' '}},
-    {{' ', ' ', ' ', ' '}, {' ', 'O', 'O', ' '}, {' ', 'O', 'O', ' '}, {' ', ' ', ' ', ' '}},
-    {{' ', 'T', ' ', ' '}, {'T', 'T', 'T', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}},
-    {{' ', 'S', 'S', ' '}, {'S', 'S', ' ', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}},
-    {{'Z', 'Z', ' ', ' '}, {' ', 'Z', 'Z', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}},
-    {{'J', ' ', ' ', ' '}, {'J', 'J', 'J', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}},
-    {{' ', ' ', 'L', ' '}, {'L', 'L', 'L', ' '}, {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '}}};
-
 // ===== COLOR =====
 void drawScore();
 void drawNext();
@@ -46,6 +37,22 @@ string getColor(char c)
                 return "\033[0m";
         }
 }
+
+unique_ptr<Block> randomBlock()
+{
+        int r = rand() % 7;
+        switch (r) {
+        case 0: return make_unique<Iblock>();
+        case 1: return make_unique<Jblock>();
+        case 2: return make_unique<Lblock>();
+        case 3: return make_unique<Oblock>();
+        case 4: return make_unique<Sblock>();
+        case 5: return make_unique<Tblock>();
+        case 6: return make_unique<Zblock>();
+        default: return make_unique<Tblock>();
+        }
+}
+
 void gotoXY(int x, int y)
 {
         COORD c = {(SHORT)x, (SHORT)y};
@@ -84,6 +91,9 @@ void init()
                                 board[i][j] = '#';
                         else
                                 board[i][j] = ' ';
+
+        currentBlock = randomBlock();
+        nextBlock = randomBlock();
 }
 // ===== DRAW =====
 void draw()
@@ -119,6 +129,58 @@ void drawScore()
     gotoXY(uiX, 2);
     cout << "\033[37m";
     cout << "SCORE: " << score << "     ";
+    cout.flush();
+}
+
+void drawNext()
+{
+    static Block* lastNext = nullptr;
+    if (nextBlock.get() == lastNext)
+    return;
+    lastNext = nextBlock.get();
+    int uiX = W * 2 + 4;
+
+    gotoXY(uiX, 5);
+    cout << "\033[37mNEXT";
+
+    for (int i = 0; i < 4; i++)
+    {
+        gotoXY(uiX, 7 + i);
+        cout << "        ";
+    }
+
+    for (int i = 0; i < 4; i++)
+        {
+        gotoXY(uiX, 7 + i);
+        for (int j = 0; j < 4; j++) 
+        {
+            char cell = nextBlock->getCell(i, j);
+            if (cell != ' ')
+            {
+                cout << getColor(cell)
+                     << "[]";
+            }
+            else
+            {
+                cout << "  ";
+            }
+        }
+        }
+    cout << "\033[0m";
+    cout.flush();
+}
+
+void drawGameOver()
+{
+    int uiX = W * 2 + 4;
+    gotoXY(uiX, 13);
+    cout << "\033[91mGAME OVER\033[0m";
+    gotoXY(uiX, 15);
+    cout << "Score: " << score;
+    gotoXY(uiX, 17);
+    cout << "[R] Restart";
+    gotoXY(uiX, 18);
+    cout << "[Q] Quit";
     cout.flush();
 }
 
@@ -161,15 +223,8 @@ void removeLine()
 
 void spawnBlock()
 {
-        b = nextBlock;
-        nextBlock = rand() % 7;
-        for (int i = 0; i < 4; i++)
-        {
-                for (int j = 0; j < 4; j++)
-                {
-                        currentBlock[i][j] = blocks[b][i][j];
-                }
-        }
+        currentBlock = move(nextBlock);
+        nextBlock = randomBlock();
 }
 
 void resetGame()
