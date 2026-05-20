@@ -88,13 +88,13 @@ void draw()
                 for (int j = 0; j < W; j++)
                 {
                         if (board[i][j] == '#')
-                                if (i != H - 1) s += "\033[0m\n";
+                                 s += "\033[37m##";
                         else if (board[i][j] == ' ')
                                 s += "  ";
                         else
                                 s += getColor(board[i][j]) + "[]";
                 }
-                s += "\033[0m\n";
+                if (i != H - 1) s += "\033[0m\n";
         }
         gotoXY(0, 0);
         cout << s;
