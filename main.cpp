@@ -88,7 +88,7 @@ void draw()
                 for (int j = 0; j < W; j++)
                 {
                         if (board[i][j] == '#')
-                                s += "\033[37m##";
+                                if (i != H - 1) s += "\033[0m\n"
                         else if (board[i][j] == ' ')
                                 s += "  ";
                         else
