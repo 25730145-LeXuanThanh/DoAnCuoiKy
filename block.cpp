@@ -18,7 +18,7 @@ protected:
 public:
     Block() : x(5), y(1) {}
 
-    void rotate(){};
+    virtual void rotate() = 0;
     
 bool canMove(int dx, int dy, const vector<vector<char>>& board)
 {
@@ -43,6 +43,7 @@ void move(int dx, int dy, vector<vector<char>>& board)
         x += dx;
         y += dy;
         }
+}
 
     void block2Board(vector<vector<char>>& board)
     {
