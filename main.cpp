@@ -12,8 +12,6 @@ std::unique_ptr<Block> nextBlock;
 int score = 0, speed = 1000;
 
 // ===== COLOR =====
-void drawScore();
-void drawNext();
 
 string getColor(char c)
 {
@@ -65,22 +63,6 @@ void hideCursor()
         ci.bVisible = FALSE;
         ci.dwSize = 100;
         SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &ci);
-}
-
-bool canMove(int dx, int dy)
-{
-        for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                        if (blocks[b][i][j] != ' ')
-                        {
-                                int xt = x + j + dx;
-                                int yt = y + i + dy;
-                                if (xt < 1 || xt >= W - 1 || yt >= H - 1)
-                                        return false;
-                                if (board[yt][xt] != ' ')
-                                        return false;
-                        }
-        return true;
 }
 
 void init()
@@ -184,21 +166,6 @@ void drawGameOver()
     cout.flush();
 }
 
-void rotate()
-{
-        char tmp[4][4];
-        for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                        tmp[j][3 - i] = currentBlock[i][j];
-
-        char old[4][4];
-        memcpy(old, currentBlock, sizeof(old));
-        memcpy(currentBlock, tmp, sizeof(tmp));
-
-        if (!canMove(0, 0))
-                memcpy(currentBlock, old, sizeof(old));
-}
-
 void removeLine()
 {
         for (int i = H - 2; i > 0; i--)
@@ -232,46 +199,21 @@ void resetGame()
         init();
         score = 0;
         speed = 1000;
-        x = 5;
-        y = 1;
         spawnBlock();
 }
 
 void hardDrop()
 {
         int dropped = 0;
-        while (canMove(0, 1))
-        {
-                y++;
-                dropped++;
-        }
-        score += dropped;
-        block2Board();
-        removeLine();
+    while (currentBlock->canMove(0, 1, board)) {
+        currentBlock->move(0, 1, board);
+        dropped++;
+    }
+    score += dropped;
+    currentBlock->block2Board(board);
+    removeLine();
 
-        x = 5;
-        y = 1;
-        spawnBlock();
-
-        if (!canMove(0, 0))
-        {
-                gotoXY(0, H + 2);
-                cout << "\033[91mGAME OVER\033[0m\nScore: " << score << endl;
-
-                cout << "\n[R] Restart  [Q] Quit";
-
-                while (1)
-                {
-                        char c = getch();
-                        if (c == 'r' || c == 'R')
-                        {
-                                resetGame();
-                                break;
-                        }
-                        if (c == 'q' || c == 'Q')
-                                exit(0);
-                }
-        }
+    spawnBlock();
 }
 
 int main()
@@ -291,7 +233,7 @@ int main()
 
         while (1)
         {
-                delBlock();
+                currentBlock->delBlock(board);
 
                 if (kbhit())
                 {
@@ -306,7 +248,7 @@ int main()
                                 score += 1;
                         }
                         if (c == 'w')
-                                currentBlock->rotate(board);
+                                currentBlock->rotate();
                         if (c == ' ')
                                 hardDrop();
                         if (c == 'q')
@@ -329,8 +271,6 @@ int main()
            
 
             if(!currentBlock->canMove(0, 0, board)){
-                saveScore(score);
-
                 drawGameOver();
 
             while(1){
