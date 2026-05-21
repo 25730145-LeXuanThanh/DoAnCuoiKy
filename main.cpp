@@ -78,7 +78,7 @@ void init()
         nextBlock = randomBlock();
 }
 // ===== DRAW =====
-void draw()
+void drawBoard()
 {
         string s = "";
         s.clear();
@@ -87,12 +87,15 @@ void draw()
         {
                 for (int j = 0; j < W; j++)
                 {
-                        if (board[i][j] == '#')
-                                 s += "\033[37m##";
-                        else if (board[i][j] == ' ')
-                                s += "  ";
-                        else
-                                s += getColor(board[i][j]) + "[]";
+                        if (board[i][j] == '#') s += "\033[37m";
+                        if(i==0 && j==0) s += "┌─";
+                        else if(i==0 && j==W-1) s += "┐";
+                        else if(i==H-1 && j==0) s += "└─";
+                        else if(i==H-1 && j==W-1) s += "┘";
+                        else if(i==0 || i==H-1) s += "──";
+                        else if(j==0 || j==W-1) s += "│ ";
+                        else if(board[i][j]==' ') s+="\033[0m. ";
+                        else s+=getColor(board[i][j])+"▓▓";
                 }
                 if (i != H - 1) s += "\033[0m\n";
         }
@@ -140,7 +143,7 @@ void drawNext()
             if (cell != ' ')
             {
                 cout << getColor(cell)
-                     << "[]";
+                     << "▓▓";
             }
             else
             {
@@ -166,8 +169,22 @@ void drawGameOver()
     cout.flush();
 }
 
+void clearGameOver()
+{
+    int uiX = W * 2 + 4;
+
+    for (int y = 13; y <= 18; y++)
+    {
+        gotoXY(uiX, y);
+        cout << "                ";
+    }
+
+    cout.flush();
+}
+
 void removeLine()
 {
+        int linesCleared = 0;
         for (int i = H - 2; i > 0; i--)
         {
                 bool full = true;
@@ -177,7 +194,7 @@ void removeLine()
 
                 if (full)
                 {
-                        score += 100;
+                        linesCleared++;
                         if (speed > 200)
                                 speed -= 5;
                         for (int ii = i; ii > 1; ii--)
@@ -185,6 +202,12 @@ void removeLine()
                                         board[ii][jj] = board[ii - 1][jj];
                         i++;
                 }
+        }
+        switch(linesCleared)
+        {
+        case 1: score += 100; break;
+        case 2: score += 300; break;
+        case 3: score += 500; break;
         }
 }
 
@@ -199,25 +222,28 @@ void resetGame()
         init();
         score = 0;
         speed = 1000;
+        clearGameOver();
         spawnBlock();
 }
 
 void hardDrop()
 {
         int dropped = 0;
-    while (currentBlock->canMove(0, 1, board)) {
+        while (currentBlock->canMove(0, 1, board)) {
         currentBlock->move(0, 1, board);
         dropped++;
-    }
-    score += dropped;
-    currentBlock->block2Board(board);
-    removeLine();
+        }
+        score += dropped;
+        currentBlock->block2Board(board);
+        removeLine();
 
-    spawnBlock();
+        spawnBlock();
 }
 
 int main()
 {
+        SetConsoleOutputCP(CP_UTF8);
+        SetConsoleCP(CP_UTF8);
         DWORD lastFall = GetTickCount();
 
         srand(time(0));
@@ -282,7 +308,9 @@ int main()
             lastFall = GetTickCount();
     }
                  currentBlock->block2Board(board);
-                draw();
+                drawBoard();
+                drawScore();
+                drawNext();
 
                 Sleep(25);
         }
