@@ -9,11 +9,17 @@ public:
         updateBlock();
     }
 
-    void rotate() override
+    void rotate(const vector<vector<char>>& board) override
     {
+        int oldState = state;
             if(state == 0) state = 1;
         else if(state == 1 ) state = 0;
         updateBlock();
+        if(!canMove(0, 0, board))
+        {
+        state = oldState;
+        updateBlock();
+        }
     }
 
         void updateBlock()
@@ -42,7 +48,7 @@ public:
         updateBlock();
     }
 
-    void rotate() override
+    void rotate(const vector<vector<char>>& board) override
     {
            
     }
@@ -66,11 +72,17 @@ public:
         updateBlock();
     }
 
-    void rotate() override
+    void rotate(const vector<vector<char>>& board) override
     {
+        int oldState = state;
         if(state >= 0 && state < 3) state++;
         else if(state == 3 ) state = 0;
         updateBlock();
+        if(!canMove(0, 0, board))
+        {
+        state = oldState;
+        updateBlock();
+        }
     }
 
     void updateBlock()
@@ -105,11 +117,17 @@ public:
         updateBlock();
     }
 
-    void rotate() override
+    void rotate(const vector<vector<char>>& board) override
     {
+        int oldState = state;
         if(state >= 0 && state < 3) state++;
         else if(state == 3 ) state = 0;
         updateBlock();
+        if(!canMove(0, 0, board))
+        {
+        state = oldState;
+        updateBlock();
+        }
     }
 
     void updateBlock()
@@ -145,11 +163,17 @@ public:
         updateBlock();
     }
 
-    void rotate() override
+    void rotate(const vector<vector<char>>& board) override
     {
+        int oldState = state;
             if(state == 0) state = 1;
         else if(state == 1 ) state = 0;
         updateBlock();
+        if(!canMove(0, 0, board))
+        {
+        state = oldState;
+        updateBlock();
+        }
     }
 
     void updateBlock()
@@ -179,11 +203,17 @@ public:
         updateBlock();
     }
 
-    void rotate() override
+    void rotate(const vector<vector<char>>& board) override
     {
+        int oldState = state;
         if(state >= 0 && state < 3) state++;
         else if(state == 3 ) state = 0;
         updateBlock();
+        if(!canMove(0, 0, board))
+        {
+        state = oldState;
+        updateBlock();
+        }
     }
 
     void updateBlock()
@@ -218,11 +248,17 @@ public:
         updateBlock();
     }
 
-    void rotate() override
+    void rotate(const vector<vector<char>>& board) override
     {
+        int oldState = state;
             if(state == 0) state = 1;
         else if(state == 1 ) state = 0;
         updateBlock();
+        if(!canMove(0, 0, board))
+        {
+        state = oldState;
+        updateBlock();
+        }
     }
 
     void updateBlock()
