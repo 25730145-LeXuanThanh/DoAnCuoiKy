@@ -39,15 +39,24 @@ string getColor(char c)
 unique_ptr<Block> randomBlock()
 {
         int r = rand() % 7;
-        switch (r) {
-        case 0: return make_unique<Iblock>();
-        case 1: return make_unique<Jblock>();
-        case 2: return make_unique<Lblock>();
-        case 3: return make_unique<Oblock>();
-        case 4: return make_unique<Sblock>();
-        case 5: return make_unique<Tblock>();
-        case 6: return make_unique<Zblock>();
-        default: return make_unique<Tblock>();
+        switch (r)
+        {
+        case 0:
+                return make_unique<Iblock>();
+        case 1:
+                return make_unique<Jblock>();
+        case 2:
+                return make_unique<Lblock>();
+        case 3:
+                return make_unique<Oblock>();
+        case 4:
+                return make_unique<Sblock>();
+        case 5:
+                return make_unique<Tblock>();
+        case 6:
+                return make_unique<Zblock>();
+        default:
+                return make_unique<Tblock>();
         }
 }
 
@@ -87,17 +96,27 @@ void drawBoard()
         {
                 for (int j = 0; j < W; j++)
                 {
-                        if (board[i][j] == '#') s += "\033[37m";
-                        if(i==0 && j==0) s += "┌─";
-                        else if(i==0 && j==W-1) s += "┐";
-                        else if(i==H-1 && j==0) s += "└─";
-                        else if(i==H-1 && j==W-1) s += "┘";
-                        else if(i==0 || i==H-1) s += "──";
-                        else if(j==0 || j==W-1) s += "│ ";
-                        else if(board[i][j]==' ') s+="\033[0m. ";
-                        else s+=getColor(board[i][j])+"▓▓";
+                        if (board[i][j] == '#')
+                                s += "\033[37m";
+                        if (i == 0 && j == 0)
+                                s += "┌─";
+                        else if (i == 0 && j == W - 1)
+                                s += "┐";
+                        else if (i == H - 1 && j == 0)
+                                s += "└─";
+                        else if (i == H - 1 && j == W - 1)
+                                s += "┘";
+                        else if (i == 0 || i == H - 1)
+                                s += "──";
+                        else if (j == 0 || j == W - 1)
+                                s += "│ ";
+                        else if (board[i][j] == ' ')
+                                s += "\033[0m. ";
+                        else
+                                s += getColor(board[i][j]) + "▓▓";
                 }
-                if (i != H - 1) s += "\033[0m\n";
+                if (i != H - 1)
+                        s += "\033[0m\n";
         }
         gotoXY(0, 0);
         cout << s;
@@ -106,80 +125,80 @@ void drawBoard()
 
 void drawScore()
 {
-    static int lastScore = -1;
-    if (score == lastScore)
-        return;
-    lastScore = score;
-    int uiX = W * 2 + 4;
-    gotoXY(uiX, 2);
-    cout << "\033[37m";
-    cout << "SCORE: " << score << "     ";
-    cout.flush();
+        static int lastScore = -1;
+        if (score == lastScore)
+                return;
+        lastScore = score;
+        int uiX = W * 2 + 4;
+        gotoXY(uiX, 2);
+        cout << "\033[37m";
+        cout << "SCORE: " << score << "     ";
+        cout.flush();
 }
 
 void drawNext()
 {
-    static Block* lastNext = nullptr;
-    if (nextBlock.get() == lastNext)
-    return;
-    lastNext = nextBlock.get();
-    int uiX = W * 2 + 4;
+        static Block *lastNext = nullptr;
+        if (nextBlock.get() == lastNext)
+                return;
+        lastNext = nextBlock.get();
+        int uiX = W * 2 + 4;
 
-    gotoXY(uiX, 5);
-    cout << "\033[37mNEXT";
+        gotoXY(uiX, 5);
+        cout << "\033[37mNEXT";
 
-    for (int i = 0; i < 4; i++)
-    {
-        gotoXY(uiX, 7 + i);
-        cout << "        ";
-    }
-
-    for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
-        gotoXY(uiX, 7 + i);
-        for (int j = 0; j < 4; j++) 
+                gotoXY(uiX, 7 + i);
+                cout << "        ";
+        }
+
+        for (int i = 0; i < 4; i++)
         {
-            char cell = nextBlock->getCell(i, j);
-            if (cell != ' ')
-            {
-                cout << getColor(cell)
-                     << "▓▓";
-            }
-            else
-            {
-                cout << "  ";
-            }
+                gotoXY(uiX, 7 + i);
+                for (int j = 0; j < 4; j++)
+                {
+                        char cell = nextBlock->getCell(i, j);
+                        if (cell != ' ')
+                        {
+                                cout << getColor(cell)
+                                     << "▓▓";
+                        }
+                        else
+                        {
+                                cout << "  ";
+                        }
+                }
         }
-        }
-    cout << "\033[0m";
-    cout.flush();
+        cout << "\033[0m";
+        cout.flush();
 }
 
 void drawGameOver()
 {
-    int uiX = W * 2 + 4;
-    gotoXY(uiX, 13);
-    cout << "\033[91mGAME OVER\033[0m";
-    gotoXY(uiX, 15);
-    cout << "Score: " << score;
-    gotoXY(uiX, 17);
-    cout << "[R] Restart";
-    gotoXY(uiX, 18);
-    cout << "[Q] Quit";
-    cout.flush();
+        int uiX = W * 2 + 4;
+        gotoXY(uiX, 13);
+        cout << "\033[91mGAME OVER\033[0m";
+        gotoXY(uiX, 15);
+        cout << "Score: " << score;
+        gotoXY(uiX, 17);
+        cout << "[R] Restart";
+        gotoXY(uiX, 18);
+        cout << "[Q] Quit";
+        cout.flush();
 }
 
 void clearGameOver()
 {
-    int uiX = W * 2 + 4;
+        int uiX = W * 2 + 4;
 
-    for (int y = 13; y <= 18; y++)
-    {
-        gotoXY(uiX, y);
-        cout << "                ";
-    }
+        for (int y = 13; y <= 18; y++)
+        {
+                gotoXY(uiX, y);
+                cout << "                ";
+        }
 
-    cout.flush();
+        cout.flush();
 }
 
 void removeLine()
@@ -203,11 +222,17 @@ void removeLine()
                         i++;
                 }
         }
-        switch(linesCleared)
+        switch (linesCleared)
         {
-        case 1: score += 100; break;
-        case 2: score += 300; break;
-        case 3: score += 500; break;
+        case 1:
+                score += 100;
+                break;
+        case 2:
+                score += 300;
+                break;
+        case 3:
+                score += 500;
+                break;
         }
 }
 
@@ -229,9 +254,10 @@ void resetGame()
 void hardDrop()
 {
         int dropped = 0;
-        while (currentBlock->canMove(0, 1, board)) {
-        currentBlock->move(0, 1, board);
-        dropped++;
+        while (currentBlock->canMove(0, 1, board))
+        {
+                currentBlock->move(0, 1, board);
+                dropped++;
         }
         score += dropped;
         currentBlock->block2Board(board);
@@ -274,40 +300,47 @@ int main()
                                 score += 1;
                         }
                         if (c == 'w')
-                                currentBlock->rotate();
+                                currentBlock->rotate(board);
                         if (c == ' ')
                                 hardDrop();
                         if (c == 'q')
                                 break;
                 }
 
-                 if(GetTickCount() - lastFall >= speed){
-        if (currentBlock->canMove(0, 1, board)) {
-        currentBlock->move(0, 1, board);
-        }
-        else
-        {
-           
-            currentBlock->block2Board(board);
-            removeLine();
+                if (GetTickCount() - lastFall >= speed)
+                {
+                        if (currentBlock->canMove(0, 1, board))
+                        {
+                                currentBlock->move(0, 1, board);
+                        }
+                        else
+                        {
 
-            
-            spawnBlock();
+                                currentBlock->block2Board(board);
+                                removeLine();
 
-           
+                                spawnBlock();
 
-            if(!currentBlock->canMove(0, 0, board)){
-                drawGameOver();
+                                if (!currentBlock->canMove(0, 0, board))
+                                {
+                                        drawGameOver();
 
-            while(1){
-            char c=getch();
-            if(c=='r'||c=='R'){ resetGame(); break; }
-            if(c=='q'||c=='Q') return 0;}
-            }
-        }
-            lastFall = GetTickCount();
-    }
-                 currentBlock->block2Board(board);
+                                        while (1)
+                                        {
+                                                char c = getch();
+                                                if (c == 'r' || c == 'R')
+                                                {
+                                                        resetGame();
+                                                        break;
+                                                }
+                                                if (c == 'q' || c == 'Q')
+                                                        return 0;
+                                        }
+                                }
+                        }
+                        lastFall = GetTickCount();
+                }
+                currentBlock->block2Board(board);
                 drawBoard();
                 drawScore();
                 drawNext();
