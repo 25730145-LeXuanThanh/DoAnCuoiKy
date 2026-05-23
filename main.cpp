@@ -6,6 +6,23 @@ using namespace std;
 
 vector<vector<char>> board(H, vector<char>(W, ' '));
 
+const string art = R"(
+*             .        _      *        .
+  .         *       .        / \  *         .
+        _p_          *      /   \       *
+      /  _  \    .          |[*]|    .         *
+     |  (_)  |              | _ |
+     |_______|      *       |   |       .
+     /       \             /     \
+    |   _|_   |   _p_     |   _   |    *        .
+    |  | | |  |  /   \    |  | |  |
+ .  |________|  | (_) |   |_______|         *
+   /__________\ |_____|  /_________\   .
+  |  ___  ___  |  | |   |  ___  ___  |       ___
+  | |_|_| |_|_| |__| |__| |_|_| |_|_| |     / * \
+^^|_____________|___|___|_____________|^^^^/_____\^^
+    *     *     *     *     *     *     *     *)";
+
 std::unique_ptr<Block> currentBlock;
 std::unique_ptr<Block> nextBlock;
 
@@ -201,6 +218,29 @@ void clearGameOver()
         cout.flush();
 }
 
+void drawArt()
+{
+    int artX = W * 2 + 12;
+    int artY = 12;
+
+    stringstream ss(art);
+
+    string line;
+
+    int y = artY;
+
+    cout << "\033[93m";
+
+    while(getline(ss, line))
+    {
+        gotoXY(artX, y++);
+        cout << line;
+    }
+
+    cout << "\033[0m";
+    cout.flush();
+}
+
 void removeLine()
 {
         int linesCleared = 0;
@@ -248,6 +288,7 @@ void resetGame()
         score = 0;
         speed = 1000;
         clearGameOver();
+        drawArt();
         spawnBlock();
 }
 
@@ -344,6 +385,13 @@ int main()
                 drawBoard();
                 drawScore();
                 drawNext();
+
+                static bool artDrawn = false;
+
+                if(!artDrawn){
+                 drawArt();
+                        artDrawn = true;
+                }
 
                 Sleep(25);
         }
